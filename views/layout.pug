@@ -1,0 +1,23 @@
+doctype html
+html(lang="es")
+    head
+        title= pageTitle
+    body
+        nav
+        ul
+            li
+                a(href="/") Inicio
+            if user
+                li
+                    a(href="/alumnos") Alumnos
+                li
+                    a(href="/asignaturas") Asignaturas
+                li
+                    a(href="/logout") Cerrar Sesion
+            else
+                li
+                    a(href="/login") Iniciar Sesion
+    block content
+
+    footer
+        p IES VIRGEN DEL CARMEN (2023)

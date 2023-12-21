@@ -1,5 +1,7 @@
-<!-- Configuracion de la Aplicacion -->
-
+/**
+ * Configuracion de la Aplicacion
+ * @type {e | (() => Express)}
+ */
 const express = require('express');
 const session = require('express-session');
 const mysql = require('mysql2');
@@ -9,9 +11,14 @@ const path = require('path');
 const app = express();
 const port = 8000;
 
-<!-- Carga y configuracion de drivers para mysql -->
+/**
+ * Carga y configuracion de drivers para mysql
+ */
 
-<!-- Configuracion de mysql -->
+/**
+ * Configuracion conexion mysql
+ */
+
 const db = mysql.createConnection({
     host: 'localhost',
     port: 33308,
@@ -20,7 +27,10 @@ const db = mysql.createConnection({
     database: 'gestion'
 });
 
-<!-- Conexion a mysql -->
+/**
+ * Conexion mysql
+ */
+
 db.connect(err => {
     if (err) {
         console.error('Error al conectarse a la base de datos: ', err);
@@ -29,7 +39,10 @@ db.connect(err => {
     console.log('Conectado a la base de datos');
 });
 
-<!-- Configuracion de la sesion -->
+/**
+ * Configuracion de la sesion
+ */
+
 app.use(session({
         secret: 'secret',
         resave: true,
@@ -37,10 +50,67 @@ app.use(session({
     })
 );
 
-<!-- Configurando el motor de plantillas -->
+/**
+ * Configuracion del motor de la plantilla
+ */
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({
         extended: true
     })
 );
+app.get('/', (req, res) => {
+    res.render('index', {user: req.session.user});
+})
+
+/**
+ * Configuracion Middleware
+ */
+
+// Middleware para gestionar la sesión de usuario
+
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    if (!req.session.user && !req.path.match("/login")) {
+        res.redirect("/login")
+    } else
+        next()
+});
+//ruta por defecto
+
+app.get('/', (req, res) => {
+    res.render('index');
+});
+// ruta para el login
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+app.post('/login', (req, res) => {
+    const {username, password} = req.body;
+    // Verificación de credenciales en MySQL
+    const query = 'SELECT * FROM users WHERE USERNAME = ? AND PASSWORD = ?';
+    db.query(query, [username, password], (err, results) => {
+        if (err) {
+            console.error('Error al verificar las credenciales:', err);
+            res.render("error", {mensaje: "Credenciales no válidas."});
+        } else {
+            if (results.length > 0) {
+                req.session.user = username;
+                res.redirect('/');
+            } else {
+                res.redirect('/login');
+            }
+        }
+    });
+});
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) res.render("error", {mensaje: err});
+        else res.redirect('/login');
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Servidor iniciado en http: localhost:${port}`);
+});
