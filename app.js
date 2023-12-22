@@ -7,6 +7,8 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
+const {response} = require("express");
+const e = require("express");
 
 const app = express();
 const port = 8000;
@@ -111,6 +113,92 @@ app.get('/logout', (req, res) => {
     });
 });
 
+app.get('/error', (req, res) => {
+    res.render('error');
+});
+
+/**
+ * Creacion del CRUD alumnos.
+ */
+
+/*
+FindAll()
+ */
+app.get('/alumnos', (req, res) => {
+    //Obtener todos los alumnos de la base de datos
+    db.query('SELECT * FROM alumno', (err, result) => {
+        if (err) res.render('error', {mensaje: err});
+        else res.render('alumnos', {alumnos: result});
+    });
+});
+
+/*
+Save()
+ */
+
+app.get('/alumnos-add', (req, res) => {
+    res.render('alumnos-add');
+});
+
+app.post('/alumnos-add', (req, res) => {
+    //Insertar un nuevo alumno en la base de datos.
+
+    const {nombre, apellidos, email, telefono} = req.body;
+    db.query('INSERT INTO alumno (NOMBRE, APELLIDOS, EMAIL, TELEFONO) VALUES (?,?,?,?)',
+        [nombre, apellidos, email, telefono], (err, result) => {
+            if (err) res.render("error", {mensaje: err});
+            else res.redirect('/alumnos');
+        });
+});
+
+/*
+Update()
+ */
+app.get('/alumnos-edit/:id', (req, res) => {
+    const alumnoId = req.params.id;
+    //Obtener un alumno por su ID;
+    db.query('SELECT * FROM alumno WHERE ID = ?', [alumnoId], (err, result) => {
+        if (err) res.render('error', {mensaje: err});
+        else res.render('alumnos-edit', {alumno: result[0]});
+    });
+});
+
+app.post('/alumnos-edit/:id', (req, res) => {
+    const alumnoId = req.params.id;
+    const {nombre, apellidos, email, telefono} = req.body;
+    db.query('UPDATE alumno SET NOMBRE = ?,APELLIDOS = ? WHERE ID = ?',
+        [nombre, apellidos, email, telefono, alumnoId], (err, result) => {
+            if (err)
+                res.render('error', {mensaje: err});
+            else
+                res.redirect('/alumnos');
+        });
+});
+
+/*
+Delete()
+ */
+app.get('/alumnos-delete/:id', (req, res) => {
+    const alumnoId = req.params.id;
+    // Obtener y mostrar el alumno a eliminar
+    db.query('SELECT * FROM alumno WHERE id = ?', [alumnoId], (err, result) => {
+        if (err)
+            res.render("error", {mensaje: err});
+        else
+            res.render('alumnos-delete', {alumno: result[0]});
+    });
+});
+
+app.post('/alumnos-delete/:id', (req, res) => {
+    const alumnoId = req.params.id;
+    // Eliminar un alumno por su ID
+    db.query('DELETE FROM alumno WHERE id = ?', [alumnoId], (err, result) => {
+        if (err)
+            res.render("error", {mensaje: err});
+        else
+            res.redirect('/alumnos');
+    });
+});
 app.listen(port, () => {
     console.log(`Servidor iniciado en http: localhost:${port}`);
 });
