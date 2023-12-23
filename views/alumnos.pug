@@ -1,4 +1,5 @@
 extends layout
+
 block content
   h1 Lista de alumnos
   table
@@ -22,6 +23,5 @@ block content
               a(href=`/alumnos-edit/${alumno.id}`) Editar
               span |
               a(href=`/alumnos-delete/${alumno.id}`) Eliminar
-            br
     p
       a(href='/alumnos-add') Agregar nuevo alumno

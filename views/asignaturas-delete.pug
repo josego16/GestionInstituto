@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Eliminar Asignatura
+  p ¿Estás seguro de que deseas eliminar la asignatura con los siguientes detalles?
+  ul
+    li Nombre: #{asignatura.nombre}
+    li Curso: #{asignatura.curso}
+    li Ciclo: #{asignatura.ciclo}
+
+  form(action=`/asignaturas-delete/${asignatura.id}`, method='post')
+    button(type='submit') Eliminar Asignatura
+  br
+  a(href='/asignaturas') Cancelar

@@ -18,8 +18,8 @@ block content
           td= asignatura.ciclo
           td= asignatura.curso
           td
-            a(href='/asignaturas/editar/#{asignatura.id}') Editar
+            a(href=`/asignaturas-edit/${asignatura.id}`) Editar
             span |
-            a(href='/asignaturas/borrar/#{asignatura.id}') Borrar
+            a(href=`/asignaturas-delete/${asignatura.id}`) Eliminar
     p
-      a(href='/asignaturas-add') Agregar nueva asignatura
+    a(href='/asignaturas-add') Agregar nueva asignatura

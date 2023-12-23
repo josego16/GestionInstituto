@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 Asignaturas matriculadas
+  h2 Profesor: #{profesor.nombre} #{profesor.apellidos} #{profesor.email}
+  if asignaturasMatriculadas.length > 0
+    ul
+        each asignatura in asignaturasMatriculadas
+          li= asignatura.asignatura
+  else
+    p El profesor no esta matriculado en ninguna asignatura.
+  a(href='/matricular') Volver atras.

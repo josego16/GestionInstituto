@@ -3,7 +3,7 @@ html(lang="es")
   head
     title= pageTitle
     style
-      include ../public/style.css
+      include ../public/css/style.css
   body
     nav
       ul
@@ -13,7 +13,11 @@ html(lang="es")
           li
             a(href="/alumnos") Alumnos
           li
+            a(href="/profesores") Profesores
+          li
             a(href="/asignaturas") Asignaturas
+          li
+            a(href="/matricular") Matriculas
           li
             a(href="/logout") Cerrar Sesion
         else
@@ -22,4 +26,5 @@ html(lang="es")
   block content
 
   footer
+    br
     p IES VIRGEN DEL CARMEN (2023)

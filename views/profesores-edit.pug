@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 Editar Profesor
+  form(action=`/profesores-edit/${profesor.id}`, method='post')
+    label(for='nombre') Nombre:
+    input.form-control(type='text', id='nombre', name='nombre', value=profesor.nombre, required=true)
+    br
+    label(for='apellidos') Apellidos:
+    input.form-control(type='text', id='apellidos', name='apellidos', value=profesor.apellidos, required=true)
+    br
+    label(for='email') Email:
+    input.form-control(type='text', id='email', name='email', value=profesor.email, required=true)
+    br
+    button(type='submit') Guardar Cambios
+    br
+  a(href='/profesores') Volver a la lista

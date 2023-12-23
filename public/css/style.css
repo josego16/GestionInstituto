@@ -65,3 +65,11 @@ th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: blue;
+}
