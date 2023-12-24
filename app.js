@@ -92,7 +92,10 @@ app.post('/login', (req, res) => {
             res.render("error", {mensaje: "Credenciales no válidas."});
         } else {
             if (results.length > 0) {
-                req.session.user = username;
+                req.session.user = {
+                    username: username,
+                    role: results[0].role
+                };
                 res.redirect('/');
             } else {
                 res.redirect('/login');

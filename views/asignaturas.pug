@@ -1,25 +1,25 @@
 extends layout
 
 block content
-  h1 Lista de Asignaturas
-  table
-    thread
-      tr
-        th ID
-        th Nombre
-        th ciclo
-        th curso
-        th Acciones
-    tbody
-        each asignatura in asignaturas
-          tr
-          td= asignatura.id
-          td= asignatura.nombre
-          td= asignatura.ciclo
-          td= asignatura.curso
-          td
-            a(href=`/asignaturas-edit/${asignatura.id}`) Editar
-            span |
-            a(href=`/asignaturas-delete/${asignatura.id}`) Eliminar
-    p
-    a(href='/asignaturas-add') Agregar nueva asignatura
+    h1 Lista de Asignaturas
+    table
+        thread
+            tr
+                th ID
+                th Nombre
+                th ciclo
+                th curso
+                th Acciones
+        tbody
+            each asignatura in asignaturas
+                tr
+                td= asignatura.id
+                td= asignatura.nombre
+                td= asignatura.ciclo
+                td= asignatura.curso
+                td
+                    a(href=`/asignaturas-edit/${asignatura.id}`) Editar
+                    span |
+                    a(href=`/asignaturas-delete/${asignatura.id}`) Eliminar
+        p
+        a(href='/asignaturas-add') Agregar nueva asignatura

@@ -1,20 +1,20 @@
 extends layout
 
 block content
-  h1 Agregar alumno
-  form(action='/alumnos-add', method='post')
-    label(for='nombre') Nombre:
-    input(type='text', id='nombre', name='nombre', required=true)
+    h1 Agregar alumno
+    form(action='/alumnos-add', method='post')
+        label(for='nombre') Nombre:
+        input(type='text', id='nombre', name='nombre', required=true)
+        br
+        label(for='apellidos') Apellido:
+        input(type='text', id='apellidos', name='apellidos', required=true)
+        br
+        label(for='email') Email:
+        input(type='text', id='email', name='email', required=true)
+        br
+        label(for='telefono') Telefono:
+        input(type='text', id='telefono', name='telefono', required=true)
+        br
+        button(type='submit') Agregar Alumno
     br
-    label(for='apellidos') Apellido:
-    input(type='text', id='apellidos', name='apellidos', required=true)
-    br
-    label(for='email') Email:
-    input(type='text', id='email', name='email', required=true)
-    br
-    label(for='telefono') Telefono:
-    input(type='text', id='telefono', name='telefono', required=true)
-    br
-    button(type='submit') Agregar Alumno
-  br
-  a(href='/') Volver a la Lista
+    a(href='/') Volver a la Lista

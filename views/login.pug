@@ -2,6 +2,8 @@ extends layout
 
 block content
     h1 Iniciar Sesion
+    style
+
     form(action='/login', method='post')
         label(for='username') Usuario:
         input(type='text', id='username', name='username', required)

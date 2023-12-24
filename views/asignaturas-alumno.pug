@@ -1,12 +1,12 @@
 extends layout
 
 block content
-  h1 Asignaturas matriculadas
-  h2 Alumno: #{alumno.nombre} #{alumno.apellidos} #{alumno.email} #{alumno.telefono}
-  if asignaturasMatriculadas.length > 0
-    ul
-        each asignatura in asignaturasMatriculadas
-          li= asignatura.asignatura
-  else
-    p El alumno no esta matriculado en ninguna asignatura.
-  a(href='/matricular') Volver atras
+    h1 Asignaturas matriculadas
+    h2 Alumno: #{alumno.nombre} #{alumno.apellidos} #{alumno.email} #{alumno.telefono}
+    if asignaturasMatriculadas.length > 0
+        ul
+            each asignatura in asignaturasMatriculadas
+                li= asignatura.asignatura
+    else
+        p El alumno no esta matriculado en ninguna asignatura.
+    a(href='/matricular') Volver atras

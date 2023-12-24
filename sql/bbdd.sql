@@ -10,14 +10,20 @@ DROP TABLE IF EXISTS asignatura;
 
 CREATE TABLE IF NOT EXISTS users
 (
-    `id`          INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `username`    VARCHAR(50)  NOT NULL,
-    `password`    VARCHAR(255) NOT NULL
+    `id`       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(50)  NOT NULL,
+    `password` VARCHAR(255) NOT NULL
 
 );
 
 INSERT INTO users (`username`, `password`)
 VALUES ('admin', 'admin');
+
+INSERT INTO users (`username`, `password`)
+VALUES ('alumno', 'alumno');
+
+INSERT INTO users (`username`, `password`)
+VALUES ('profesor', 'profesor');
 
 CREATE TABLE profesor
 (
