@@ -6,6 +6,7 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
+const e = require("express");
 
 //Creamos el objeto para la aplicacion.
 const app = express();
@@ -462,6 +463,78 @@ app.get('/asignaturas/:alumnoId', (req, res) => {
 /**
  * Matricular profesores de asignaturas
  */
+
+//rutas
+app.get('/matricularPf', (req, res) => {
+    //Obtener lista de alumnos y asignaturas
+    const queryAlumnos = 'SELECT * FROM profesor';
+    const queryAsignatura = 'SELECT * FROM asignatura';
+
+    db.query(queryAlumnos, (errProfesores, resultProfesores) => {
+        if (errProfesores) throw errProfesores;
+
+        db.query(queryAsignatura, (errAsignaturas, resultAsignaturas) => {
+            if (errAsignaturas) throw errAsignaturas;
+
+            res.render('matriculasProfesores', {
+                profesores: resultProfesores,
+                asignaturas: resultAsignaturas,
+            });
+        });
+    });
+});
+
+app.post('/matricularPf', (req, res) => {
+    const {profesor, asignatura} = req.body;
+
+    //Verificar si la matricula ya existe
+    const queryExiste = 'SELECT * FROM profesor_asignatura WHERE profesor = ? AND asignatura = ?';
+    db.query(queryExiste, [profesor, asignatura],
+        (errExiste, resultExiste) => {
+            if (errExiste) throw errExiste;
+
+            if (resultExiste.length === 0) {
+                //Matricular el profesor en la asignatura
+                const queryMatricular = 'INSERT INTO profesor_asignatura (profesor, asignatura) VALUES (?,?)';
+                db.query(queryMatricular, [profesor, asignatura],
+                    (errMatricular) => {
+                        if (errMatricular) throw errMatricular;
+
+                        res.redirect('/matricularPf')
+                    });
+            } else {
+                //La matricula ya existe
+                res.render('error', {mensaje: 'La matricula ya existe'});
+            }
+        });
+});
+
+app.get('/asignaturas/:profesorId', (req, res) => {
+    const profesorId = req.params.profesorId;
+
+    //Obtener asignaturas matriculadas para el alumno seleccionado.
+    const queryAsignaturasMatriculadasProfesor = `SELECT asignatura.nombre as asignatura, profesor.*
+                                          FROM asignatura,
+                                               profesor,
+                                               profesor_asignatura
+                                          WHERE profesor_asignatura.profesor = ?
+                                            AND asignatura.id = profesor_asignatura.asignatura
+                                            AND profesor.id = ?;`;
+
+    db.query(queryAsignaturasMatriculadasProfesor, [profesorId, profesorId], (err, result) => {
+        if (err)
+            res.render('error', {mensaje: err});
+        else {
+            const asignaturasProfe = result;
+            db.query('SELECT * FROM profesor WHERE id = ?', [profesorId], (err, result) => {
+                if (err)
+                    res.render('error', {mensaje: err});
+                else
+                    res.render('asignaturas-profesor', {profesor: result[0], asignaturasProfesores: asignaturasProfe});
+            });
+        }
+    });
+});
 
 /**
  * Iniciamos el servidor

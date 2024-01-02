@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h1 Gestion de Matriculas de Profesores
+    h2 Matricular Profesores en Asignaturas
+
+    form(action='/matricularPf', method='post')
+        label(for="profesor") Selecciona un profesor:
+            select(name='profesor' id='profesor')
+                each profesor in profesores
+                    option(value=profesor.id)= `${profesor.nombre} ${profesor.apellidos}`
+        label(for='asignaturaProfesor') Selecciona una asignatura:
+            select(name='asignatura' id='asignaturaProfesor')
+                each asignatura in asignaturas
+                    option(value=asignatura.id)= asignatura.nombre
+
+        button(type='submit') Matricular
+        br
+
+    h2 Profesores matriculados de una asignatura
+
+    form(action='/matricularPf', method='post')
+        label(for='profesorAsignaturas') Selecciona un profesor para ver sus asignaturas matriculadas:
+            select(name='profesorAsignatura' id='profesorAsignaturas' onchange="location = '/asignaturas/' + this.value;")
+                option
+                    each profesor in profesores
+                        option(value=profesor.id)= `${profesor.nombre} ${profesor.apellidos}`
