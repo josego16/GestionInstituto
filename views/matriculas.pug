@@ -16,42 +16,13 @@ block content
                     option(value=asignatura.id)= asignatura.nombre
 
         button(type='submit') Matricular
+        br
 
-    h2 Matricular Profesores en asignaturas
+    h2 Alumnos matriculados de una asignatura
 
     form(action='/matricular', method='post')
-        label(for='profesor') Selecciona un profesor:
-            select(name='profesor' id='profesor')
-                if profesores
-                    each profesor in profesores
-                        option(value=profesor.id)= `${profesor.nombre} ${profesor.apellidos} ${profesor.email}`
-                else
-                    p No se encontraron profesores.
-
-        label(for='asignaturaProfesor') Selecciona una Asignatura:
-            select(name='asignatura' id='asignaturaProfesor')
-                each asignatura in asignaturas
-                    option(value=asignatura.id)= asignatura.nombre
-        button(type='submit') Matricular
-
-        hr
-
-        h2 Maestro detalle: Alumnos matriculados de una asignatura
-
         label(for='alumnoAsignaturas') Selecciona un alumno para ver sus asignaturas matriculadas:
-
-        select(name='alumnoAsignaturas' id='alumnoAsignaturas' onchange="location = '/asignaturas/' + this.value;")
-            option
-                each alumno in alumnos
-                    option(value=alumno.id)= `${alumno.nombre} ${alumno.apellidos}`
-
-        h2 Maestro detalle: Profesores matriculados de una asignatura
-        label(for='profesorAsignaturas') Selecciona un profesor para ver sus asignaturas matriculadas:
-        select(name='profesorAsignaturas' id='profesorAsignaturas' onchange="location= '/asignaturas/' + this.value;")
-
-            if profesores
+            select(name='alumnoAsignaturas' id='alumnoAsignaturas' onchange="location = '/asignaturas/' + this.value;")
                 option
-                    each profesor in profesores
-                        option(value=profesor.id)= `${profesor.nombre} ${profesor.apellidos} ${profesor.email} ${profesor.telefono}`
-            else
-                p No se encontraron profesores
+                    each alumno in alumnos
+                        option(value=alumno.id)= `${alumno.nombre} ${alumno.apellidos}`

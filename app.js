@@ -6,8 +6,6 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
-const {response} = require("express");
-const e = require("express");
 
 //Creamos el objeto para la aplicacion.
 const app = express();
@@ -464,75 +462,6 @@ app.get('/asignaturas/:alumnoId', (req, res) => {
 /**
  * Matricular profesores de asignaturas
  */
-
-//rutas
-app.get('/matricular', (req, res) => {
-    //Obtener lista de profesores y asignaturas
-    const queryProfesores = 'SELECT * FROM profesor';
-    const queryAsignaturas = 'SELECT * FROM asignatura';
-
-    db.query(queryProfesores, (errProfesores, resultProfesores) => {
-        if (errProfesores) throw errProfesores;
-
-        db.query(queryAsignaturas, (errAsignaturas, resultAsignaturas) => {
-            if (errAsignaturas) throw errAsignaturas;
-
-            res.render('matriculas', {
-                profesores: resultProfesores,
-                asignaturas: resultAsignaturas,
-            });
-        });
-    });
-});
-
-app.post('/matricular', (req, res) => {
-    const {profesor, asignatura} = req.body;
-
-    //Verificar si la matricula ya existe
-    const queryExiste = 'SELECT * FROM profesor_asignatura WHERE profesor = ? AND asignatura = ?';
-    db.query(queryExiste, [profesor, asignatura], (errExiste, resultExiste) => {
-        if (errExiste) throw errExiste;
-
-        if (resultExiste.length === 0) {
-            //Matricular el alumno en la asignatura
-            const queryMatricular = 'INSERT INTO profesor_asignatura (profesor, asignatura) VALUES (?,?)';
-            db.query(queryMatricular, [profesor, asignatura], (errMatricular) => {
-                if (errMatricular) throw errMatricular;
-
-                res.redirect('/matriculas')
-            });
-        } else {
-            //La matricula ya existe.
-            res.render('error', {mensaje: 'La matricula ya existe'});
-        }
-    })
-});
-
-app.get('/asignaturas/:profesorId', (req, res) => {
-    const profesorId = req.params.profesorId;
-
-    //Obtener asignaturas matriculadas para el alumno seleccionado
-    const queryAsignaturasMatriculadas = `SELECT asignatura.nombre as asignatura, profesor.*
-                                          FROM asignatura,
-                                               profesor,
-                                               profesor_asignatura
-                                          WHERE profesor_asignatura.profesor = ?
-                                            AND asignatura.id = profesor_asignatura.asignatura
-                                            AND profesor.id = profesor_asignatura.profesor;`;
-    db.query(queryAsignaturasMatriculadas, [profesorId], (err, result) => {
-        if (err)
-            res.render('error', {mensaje: err});
-        else {
-            const asignaturas = result;
-            db.query('SELECT * FROM profesor WHERE profesor.id = ?', [profesorId], (err, result) => {
-                if (err)
-                    res.render('error', {mensaje: err});
-                else
-                    res.render('asignaturas-profesor', {profesor: result[0], asignaturasMatriculadas: asignaturas});
-            });
-        }
-    });
-});
 
 /**
  * Iniciamos el servidor
