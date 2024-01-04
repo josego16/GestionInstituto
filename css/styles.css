@@ -6,6 +6,7 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
+    background: antiquewhite;
 }
 
 h1 {
@@ -91,6 +92,7 @@ form button {
     width: 30%;
     padding: 8px 12px;
     background-color: #007bff;
+    align-content: center;
     color: white;
     border: none;
     border-radius: 4px;
